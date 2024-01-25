@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Shop</title>
+
+  <style>
+#margin{
+  margin-left: 50px;
+}
+    h1{
+      text-align: center;
+    }
+  label{
+    display: inline-block;
+    width: 200px;
+  }
+  table,th,tr,tbody,td{
+    border: 1px solid black;
+    border-collapse: collapse;
+
+  }
+.tabela{
+  display: inline-block;
+  margin-right: 60px;
+
+}
+  </style>
+
+</head>
+<body>
+<script>
+  let globalCounter=0;
+
+  function add() {
+      let name = document.getElementById("name")
+    let item = document.getElementById("item")
+    let  code = document.getElementById("code")
+    let  description = document.getElementById("description")
+    let price= document.getElementById("price")
+    let  used = document.getElementById("dropdown")
+
+    if (name.value && item.value && code.value && description.value &&price.value && used.value){
+
+    } else {
+      alert("Vnesete gi site polinja")
+      return;
+    }
+    let novaCena = parseInt(price.value)
+    if (isNaN(price.value) || price.value<=0){
+      alert("Vnesi broj za cenata koj e pogolem od 0!")
+      return;
+    }
+
+    let code2=code
+    let Number = katalogNumber(code2);
+     novaCena *= 1.1
+
+    // Check if the code already exists in the used items
+    let usedRows = document.getElementById("used-tabela").getElementsByTagName("tr");
+    if (codeExists(usedRows, code.value)) {
+      alert("Code already exists in used items. Please enter a different code.");
+      return;
+    }
+
+    // Check if the code already exists in the never-used items
+    let unUsedRows = document.getElementById("un-used-tabela").getElementsByTagName("tr");
+    if (codeExists(unUsedRows, code.value)) {
+      alert("Code already exists in never-used items. Please enter a different code.");
+      return;
+    }
+
+    if (used.value === "used"){
+      let usedTabela = document.getElementById("used-tabela")
+      let addUsed = document.createElement("tr")
+
+      addUsed.innerHTML = "<td>"+name.value+"</td>"+
+              "<td>"+item.value+"</td>"+
+              "<td>"+novaCena.toFixed(0)+"</td>"+
+              "<td>"+code.value+"</td>"+
+              "<td>"+Number+"</td>"+
+              "<button onclick='sold(this)'>Sold</button>"
+
+      usedTabela.append(addUsed)
+
+    }
+    if (used.value === "never-used"){
+      let unUsed = document.getElementById("un-used-tabela")
+      let addUnused = document.createElement("tr")
+
+      addUnused.innerHTML = "<td>"+name.value+"</td>"+
+              "<td>"+item.value+"</td>"+
+              "<td>"+novaCena.toFixed(0)+"</td>"+
+              "<td>"+code.value+"</td>"+
+              "<td>"+Number+"</td>"+
+            "<button onclick='sold(this)'>Sold</button>"
+
+      unUsed.append(addUnused)
+    }
+    globalCounter++;
+
+
+    let getNow= document.getElementById("update-n");
+    getNow.innerHTML = globalCounter;
+
+  }
+
+  function codeExists(rows, newCode) {
+    for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+      let existingCode = rows[i].getElementsByTagName("td")[3].innerHTML; // Assuming code is in the 4th column (index 3)
+      if (existingCode === newCode) {
+        return true; // Code already exists
+      }
+    }
+    return false; // Code does not exist
+  }
+
+  function katalogNumber(code) {
+    let novNumber="";
+    let value = code.value;
+    for (let i=0;i<value.length;i++){
+      if (isNaN(value[i]) && value[i] !== "!" ){
+        novNumber += value[i];
+      }
+    }
+    return novNumber;
+  }
+
+  function sold(btn) {
+    globalCounter--;
+    let update=document.getElementById("update-n")
+    update.innerHTML=globalCounter;
+    let red = btn.parentNode;
+    red.style.backgroundColor="yellow"
+    btn.remove()
+  }
+
+</script>
+<h1>Online shop</h1>
+<div>
+  <div>
+    <label for="name">Name</label>
+    <input type="text" id="name">
+  </div><br>
+  <div>
+    <label for="item">Item</label>
+    <input type="text" id="item">
+  </div><br>
+  <div>
+    <label for="code">Item Code</label>
+    <input type="text" id="code">
+  </div><br>
+  <div>
+    <label for="description">Item description</label>
+    <input type="text" id="description">
+  </div><br>
+  <div>
+    <label for="price">Price</label>
+    <input type="text" id="price">
+  </div><br>
+  <div>
+    <label for="dropdown">Used</label>
+    <select id="dropdown">
+      <option></option>
+      <option>used</option>
+      <option>never-used</option>
+    </select>
+  </div><br>
+  <button onclick="add()">Add</button>
+</div>
+
+<p>Active items: <span id="update-n">0</span> </p>
+
+<div class="tabela">
+  <h2>Unused items</h2>
+  <table id="un-used-tabela">
+    <thead>
+    <th>Name</th>
+    <th>Item</th>
+    <th>Price</th>
+    <th>Code</th>
+    <th>Number</th>
+    <th>Actions</th>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="tabela">
+  <h2>Used items</h2>
+  <table id="used-tabela">
+    <thead>
+    <th>Name</th>
+    <th>Item</th>
+    <th>Price</th>
+    <th>Code</th>
+    <th>Number</th>
+    <th>Actions</th>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

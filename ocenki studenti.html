@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Da polagas</title>
+
+    <style>
+
+table,th,tbody,td{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+
+body{
+    display: grid;
+    grid-column: 1fr 1fr 1fr 1fr 1fr ;
+    grid-row: 1fr 1fr 1fr 1fr;
+}
+#form{
+        grid-column-start: 0;
+        grid-column-end: 2;
+    }
+
+#tabla{
+    grid-column-start: 0;
+    grid-column-end: 6;
+    grid-row-start: 3;
+    grid-row-end: 8;
+
+}
+#revert-history{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 0;
+    grid-row-end: 1;
+}
+
+    </style>
+
+</head>
+<body>
+
+<script>
+    let counter=0;
+    let sumaOceni=0;
+    function dodadi() {
+        let ime=document.getElementById("name")
+        let index=document.getElementById("index");
+        let phone = document.getElementById("phone");
+        let petka = document.getElementById("5");
+        let seska= document.getElementById("6");
+        let sedumka= document.getElementById("7");
+        let osumka= document.getElementById("8");
+        let devetka= document.getElementById("9");
+        let desetka= document.getElementById("10");
+        let sesija = document.getElementById("sesija")
+
+        if (ime.value === "" || index.value ==="" || phone.value==="" || (petka.checked==false && seska.checked==false && sedumka.checked==false && osumka.checked==false && desetka.checked==false && devetka.checked==false) || sesija.value===""){
+            alert("Внесете ги сите полиња")
+            return;
+        }
+
+        let novTelefon =checkNum(phone);
+
+        let ocenka=""
+
+        if (petka.checked === true){
+            ocenka = 5
+        }
+        else if (seska.checked === true){
+            ocenka=6;
+        }
+        else if (sedumka.checked === true){
+            ocenka=7;
+        }
+        else if (osumka.checked === true){
+            ocenka=8;
+        }
+        else if (devetka.checked === true){
+            ocenka=9;
+        }
+        else if (desetka.checked === true){
+            ocenka=10;
+        }
+
+        let novaTabele = document.getElementById("tabla");
+        let novRed = document.createElement("tr")
+
+        novRed.innerHTML = "<td>"+ime.value+"</td>"+
+            "<td>"+index.value+"</td>"+
+            "<td>"+novTelefon+"</td>"+
+            "<td>"+ocenka+"</td>"+
+            "<td>"+sesija.value+"</td>"+
+            "<td><button id='confirm' onclick='confirm(this)'>Confirm</button> <button id='revert' onclick='revert(this)'>Revert</button> </td>"
+
+            novaTabele.append(novRed);
+
+
+
+        counter++;
+
+        let parseOcenka = parseInt(ocenka);
+        console.log(parseOcenka);
+        sumaOceni += parseOcenka;
+        let vnesi = document.getElementById("insert-average");
+        let broj = sumaOceni/counter;
+       let print= broj.toFixed(1)
+        vnesi.innerHTML=print;
+
+
+        ime.value=""
+        index.value=""
+        phone.value=""
+        petka.checked=false
+        seska.checked=false
+        sedumka.checked=false
+        osumka.checked=false
+        desetka.checked=false
+        devetka.checked=false
+
+    }
+
+    function checkNum(number) {
+       const del1 = number.value.slice(0,3);
+       const del2= number.value.slice(3,6);
+       const del3 = number.value.slice(6,9);
+       let NUMBER = del1 + "/" + del2 + "-" +del3;
+        return NUMBER;
+    }
+
+    function confirm(btn){
+        btn.disabled=true
+        btn.nextSibling.nextSibling.disabled=true
+        btn.parentNode.parentNode.style="background-color:lightgreen"
+    }
+
+    function revert(btn) {
+        let revert = document.getElementById("add-reverted");
+        let add = document.createElement("li")
+
+        let parent = btn.parentNode.parentNode;
+        let indeks = parent.children[1].innerHTML;
+        let ocena = parent.children[3].innerHTML;
+
+        add.innerHTML= indeks + " " + "-" + " " + "grade" + " " + ocena;
+        revert.append(add);
+
+        let r1 = parent.children[3].innerHTML
+        let parsed = parseInt(r1)
+
+        counter--
+        sumaOceni -= parsed;
+        let final = sumaOceni/counter;
+        let finalone = final.toFixed(1);
+        let element = document.getElementById("insert-average")
+        element.innerHTML =finalone
+        parent.remove();
+    }
+</script>
+
+<div>
+<h1>Details</h1>
+
+<div id="form">
+    <div>
+        <label for="name">Name</label>
+        <input type="text" id="name">
+    </div><br>
+    <div>
+        <label for="index">Index</label>
+        <input type="text" id="index">
+    </div><br>
+    <div>
+        <label for="phone">Phone</label>
+        <input type="text" id="phone">
+    </div><br>
+    <label for="5">Grade</label>
+    <input type="radio" name="choice" value="5" id="5">5
+    <input type="radio" name="choice" value="6" id="6">6
+    <input type="radio" name="choice" value="7" id="7">7
+    <input type="radio" name="choice" value="8" id="8">8
+    <input type="radio" name="choice" value="9" id="9">9
+    <input type="radio" name="choice" value="10" id="10">10
+
+    <div>
+        <Br>
+        <label for="sesija">Session</label>
+        <select id="sesija">
+        <option></option>
+            <option>January</option>
+            <option>June</option>
+            <option>September</option>
+        </select>
+    </div>
+    <br>
+
+    <button id="dodadi" onclick="dodadi()">Import student</button>
+</div>
+
+
+
+<br>
+<h3>Students (average grade : <span id="insert-average">0</span>) </h3>
+<br>
+<table id="tabla">
+    <thead>
+    <th>Name</th>
+    <th>Index</th>
+    <th>Phone</th>
+    <th>Grade</th>
+    <th>Session</th>
+    <th>Action</th>
+        </thead>
+    <tbody>
+
+    </tbody>
+    </table>
+</div>
+
+<div id="revert-history">
+    <h3>Revert history</h3>
+    <ul id="add-reverted">
+
+    </ul>
+</div>
+
+</body>
+</html>

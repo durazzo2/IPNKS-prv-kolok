@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Al me kardira</title>
+
+  <style>
+    .zaStyle{
+      display: inline-block;
+      margin-right: 20px;
+      text-align: top;
+    }
+    h1{
+      text-align: center;
+    }
+    label{
+      display: inline-block;
+      width: 100px;
+    }
+
+  </style>
+
+</head>
+<body>
+<script>
+  let globalCounter=0
+  function add() {
+    let username = document.getElementById("username")
+    let id = document.getElementById("ID")
+    let width = document.getElementById("width")
+    let height = document.getElementById("height")
+    let color = document.getElementById("boja")
+
+    if (username.value && id.value && width.value && height.value && color.value) {
+    } else {
+      alert("Внесете ги сите полиња");
+      return;
+    }
+
+
+    if (!checkID(id)){
+      alert("Внеси точно ID")
+      return ;
+    }
+    let pixel = (width.value * height.value) *0.5
+
+    if (color.value ==="Red"){
+      pixel += 1000;
+    }
+
+    if (height.value > 500 || width.value>500){
+      alert("Внесете должина и висина помали од 500px")
+      return;
+    }
+
+    let novdiv=document.getElementById("create-card")
+    let createDiv = document.createElement("div")
+
+    // for (let i=0;i<createDiv.length;i++){                        ////ne e tocno!!!!
+    //   if (createDiv[i].children[0].innerHTML === id.value){
+    //     createDiv[i].children[1].children[0].innerHTML = width.value
+    //     createDiv[i].children[2].children[0].innerHTML = height.value
+    //     createDiv[i].children[3].children[0].innerHTML = color.value
+    //     createDiv[i].children[4].children[0].innerHTML =  pixel.toString()
+    //     createDiv[i].style.background = color.value
+    //     createDiv[i].style.width = width.value + "px"
+    //     createDiv[i].style.height = height.value + "px"
+    //   }
+    // }
+
+
+    createDiv.innerHTML="<p>"+"ID: "+id.value+"</p>"+
+            "<p>"+"Width: "+width.value+"</p>"+
+            "<p>"+"Height: "+height.value+"</p>"+
+            "<p>"+"Color: "+color.value+"</p>"+
+            "<p>"+"Vkupna suma: "+pixel+"</p>"+
+            "<button id='sell' onclick='sell(this)'>Sell</button>"
+
+
+    createDiv.setAttribute("class","zaStyle")
+
+    if (color.value === "Red"){
+      createDiv.style.backgroundColor="red"
+      createDiv.style.width=width.value+"px";
+      createDiv.style.height=height.value+"px";
+
+    }
+    if (color.value === "Yellow"){
+      createDiv.style.backgroundColor="lightyellow"
+      createDiv.style.width=width.value+"px";
+      createDiv.style.height=height.value+"px";
+    }
+    if (color.value === "Blue"){
+      createDiv.style.backgroundColor="lightblue"
+      createDiv.style.width=width.value+"px";
+      createDiv.style.height=height.value+"px";
+    }
+    if (color.value === "Green"){
+      createDiv.style.backgroundColor="lightgreen"
+      createDiv.style.width=width.value+"px";
+      createDiv.style.height=height.value+"px";
+    }
+    console.log(color.value)
+
+
+    novdiv.append(createDiv);
+  }
+
+  function checkID(id) {
+      let novid=id.value
+      for (let i=0;i<novid.length;i++){
+        if (novid[i] === novid[i].toUpperCase()){
+          return false;
+        }
+        else if (!isNaN(novid[i])){
+          return  false
+        }
+        else return true
+      }
+
+  }
+
+  function sell(btn) {
+    globalCounter++;
+    btn.parentNode.remove();
+    let update = document.getElementById("vk-prodadeni")
+    update.innerHTML=globalCounter;
+  }
+
+</script>
+  <h1>User Cards</h1>
+<div>
+  <div>
+    <label for="username">Username</label>
+    <input type="text" id="username"><br><br>
+  </div>
+  <div>
+    <label for="ID">ID</label>
+    <input type="text" id="ID"><br><br>
+  </div>
+  <div>
+    <label for="width">Width</label>
+    <input type="text" id="width"><br><br>
+  </div>
+  <div>
+    <label for="height">Height</label>
+    <input type="text" id="height"><br><br>
+  </div>
+  <div>
+    <label for="boja">Color</label>
+    <select id="boja">
+      <option></option>
+      <option>Red</option>
+      <option>Yellow</option>
+      <option>Green</option>
+      <option>Blue</option>
+    </select>
+  </div><br>
+  <button onclick="add()">Add</button>
+</div>
+
+<p>Вкупно продадени: <span id="vk-prodadeni"></span> </p>
+
+<div id="create-card">
+
+</div>
+
+
+
+
+</body>
+</html>

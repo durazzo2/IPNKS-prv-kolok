@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>zadaca1</title>
+    <style>
+        label{
+            display: inline-block;
+            width: 100px;
+        }
+        #kopce{
+            width: 100px;
+            margin-left: 70px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    function add(){
+        let username=document.getElementById("username");
+        let id=document.getElementById("id");
+        let width=document.getElementById("width");
+        let height=document.getElementById("height");
+        let color = document.getElementById("color");
+
+        if(username.value==="" || id.value==="" || width.value==="" || height.value==="" || color.value==="")
+        {
+            alert("All fields are required!")
+
+        }
+        checkID();
+
+            id.value="";
+            width.value="";
+            height.value="";
+            username.value="";
+            color.value="";
+
+
+
+
+
+
+    }
+
+    function checkID(){
+        let idval = id.value
+        for (let i =0;i<idval.length;i++){
+            if (!isNaN(idval[i]) || idval[i] === idval[i].toUpperCase() ){
+               return  alert("Внесете правилен формат на ID");
+            }
+        }
+    }
+</script>
+<div>
+    <form>
+        <label for="username">Username</label>
+        <input type="text" id="username"><br><br>
+        <label for="id">ID</label>
+        <input type="text" id="id"><br><br>
+        <label for="width">Width</label>
+        <input type="text" id="width"><br><br>
+        <label for="height">Height</label>
+        <input type="text" id="height"><br><br>
+        <label for="color">Color</label>
+        <select id="color">
+            <option></option>
+            <option id="red">red</option>
+            <option id="yellow">yellow</option>
+            <option id="green">green</option>
+            <option id="blue">blue</option>
+        </select><br><br>
+        <input type="button" id="kopce" value="Add" onclick="add()">
+    </form>
+</div>
+</body>
+</html>

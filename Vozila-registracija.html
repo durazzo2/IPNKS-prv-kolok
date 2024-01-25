@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+    .nova{
+        display: inline-block;
+        width: 200px;
+        height: 300px;
+        border: 1px solid black;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+    </style>
+
+</head>
+<body>
+<script>
+    let globalCounter=0;
+
+    function dodadi() {
+        let  ime = document.getElementById("ime")
+        let prezime = document.getElementById("prezime")
+        let tablica =document.getElementById("tablica")
+        let starost=document.getElementById("starost")
+        let cuknat = document.getElementById("da")
+        let necuknat = document.getElementById("ne")
+
+        if (ime.value ==="" || prezime.value==="" || tablica.value==="" || starost.value==="" || (cuknat.selected===false && necuknat.selected===false)){
+            alert("Vnesete gi site polinja")
+            return;
+        }
+
+        let  lupnat =""
+        let naplata=3000;
+
+        if (cuknat.checked === true){
+            naplata +=500;
+            lupnat+="Da";
+        } else if (necuknat.checked===true){
+            lupnat += "ne"
+        }
+
+        if (!check(tablica)){
+            alert("Gresen format")
+            return;
+        }
+
+        if (checkZlatna(tablica)){
+            naplata+=1000;
+        }
+
+
+        let element = document.getElementById("smetki")
+        let novDiv = document.createElement("div")
+
+
+            novDiv.innerHTML= "<p>"+ime.value+" "+prezime.value + "</p>"+
+                "<p>"+tablica.value+"</p>"+
+                "<p>"+"soobrajkajki: "+lupnat+"</p>"+
+                "<p>"+"Starost na vozilo " +starost.value +"</p>"+
+                "<p>"+"Za plakanje "+naplata+"</p>"+
+                "<button id='plati' onclick='plati(this)'>Plati</button> <button id='izbrisi' onclick='izbrisi(this)'>Izbrisi</button>"
+
+        element.append(novDiv)
+        globalCounter++;
+
+        novDiv.setAttribute("class","nova")
+        if (starost.value >30){
+            novDiv.style.backgroundColor = "red"}
+        else
+            novDiv.style.backgroundColor = "lightgreen"
+
+        let brojka=globalCounter
+        let updataSmetki = document.getElementById("broj-smetki")
+        updataSmetki.innerHTML=brojka
+
+        ime.value=""
+        prezime.value=""
+        tablica.value=""
+        starost.value=""
+        cuknat.checked=false
+        necuknat.checked=false
+    }
+
+    function plati (btn) {
+        globalCounter--;
+        btn.disabled=true;
+        btn.nextSibling.nextSibling.disabled=true
+        let novismetki = document.getElementById("broj-smetki")
+        novismetki.innerHTML=globalCounter
+    }
+
+    function izbrisi(btn) {
+        btn.parentNode.remove();
+        globalCounter--;
+        let novismetki = document.getElementById("broj-smetki")
+        novismetki.innerHTML=globalCounter
+    }
+
+    function checkZlatna(tabla) {
+        let brojka = tabla.value.split("-")[1]
+        if (brojka[0]===brojka[1] && brojka[0]===brojka[2] && brojka[0]===brojka[3]){
+            return true
+        } else return false
+    }
+    function check(tablica) {
+
+        let regex = /^[A-Z][A-Z]-[0-9][0-9][0-9][0-9]-[A-Z][A-Z]$/
+            if (regex.test(tablica.value)){
+                return true
+            } else return false;
+
+            if (tablica.value.length !== 10){
+                return  false
+            }
+    }
+
+</script>
+<div>
+    <div>
+        <label for="ime">Name</label>
+        <input type="text" id="ime">
+    </div>
+    <div>
+        <label for="prezime">Prezime</label>
+        <input type="text" id="prezime">
+    </div>
+    <div>
+        <label for="tablica">Tablica</label>
+        <input type="text" id="tablica">
+    </div>
+    <div>
+        <label for="starost">Godina na starost</label>
+        <input type="text" id="starost">
+    </div>
+    <div>
+        <label for="da">Nezgoda</label>
+        <input type="radio" value="da" id="da" name="choice"> Da
+        <input type="radio" id="ne" value="ne" name="choice">Ne
+    </div>
+        <button id="add" onclick="dodadi()">Generiraj smetka</button>
+</div>
+
+    <h1>Smetki</h1>
+    <p>Vkupno za plakjanje: <span id="broj-smetki">0</span> </p>
+
+<div id="smetki">
+
+</div>
+
+</body>
+</html>
